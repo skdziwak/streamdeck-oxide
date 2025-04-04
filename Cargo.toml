@@ -1,0 +1,37 @@
+[package]
+name = "streamdeck-oxide"
+version = "0.1.0"
+edition = "2021"
+description = "A high-level framework for creating Stream Deck applications in Rust"
+authors = ["Szymon Dziwak <skdziwak@example.com>"]
+license = "MIT"
+repository = "https://github.com/skdziwak/streamdeck-oxide"
+documentation = "https://docs.rs/streamdeck-oxide"
+readme = "README.md"
+keywords = ["streamdeck", "elgato", "ui", "framework", "async"]
+categories = ["gui", "hardware-support", "asynchronous"]
+include = [
+    "fonts/Roboto-Medium.ttf",
+    "src/**/*.rs",
+]
+
+
+[dependencies]
+ab_glyph = "0.2.29"
+async-trait = "0.1.88"
+elgato-streamdeck = { version = "0.9.2", features = ["async"] }
+generic-array = "1.2.0"
+image = { version = "0.25.6", features = ["png"] }
+imageproc = "0.25.0"
+md-icons = "0.3.2"
+resvg = "0.45.0"
+rusttype = "0.9.3"
+tokio = { version = "1.44.1", features = ["full"] }
+typenum = "1.18.0"
+
+[features]
+default = []
+
+[[example]]
+name = "basic_usage"
+path = "example/src/main.rs"
