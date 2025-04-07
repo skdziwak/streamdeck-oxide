@@ -44,6 +44,8 @@ where
     pub(crate) navigation_sender: Arc<mpsc::Sender<N>>,
     /// The application context.
     pub(crate) context: C,
+    /// Current navigation entry
+    pub(crate) current_navigation: RwLock<N>,
 }
 
 impl<N: NavigationEntry<W, H, C>, W, H, C> DisplayManager<N, W, H, C>
@@ -75,6 +77,7 @@ where
                 _height: PhantomData,
                 navigation_sender: sender.clone(),
                 context,
+                current_navigation: RwLock::new(N::default()),
             },
             receiver,
         ))
@@ -84,13 +87,22 @@ where
     ///
     /// This method navigates to the view associated with the given
     /// navigation entry.
-    pub async fn navigate_to(
-        &self,
-        navigation_entry: N,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn navigate_to(&self, navigation_entry: N) -> Result<(), Box<dyn std::error::Error>> {
         let mut view = self.view.write().await;
+        let mut current_navigation = self.current_navigation.write().await;
         *view = navigation_entry.get_view()?;
+        *current_navigation = navigation_entry.clone();
         Ok(())
+    }
+
+    /// Get current navigation entry.
+    ///
+    /// This method returns the current navigation entry.
+    pub async fn get_current_navigation(
+        &self,
+    ) -> Result<N, Box<dyn std::error::Error>> {
+        let current_navigation = self.current_navigation.read().await;
+        Ok(current_navigation.clone())
     }
 
     /// Render the current view.
@@ -184,7 +196,8 @@ where
     /// the on_click method of the current view.
     pub async fn on_release(&self, button: u8) -> Result<(), Box<dyn std::error::Error>> {
         let view = self.view.read().await;
-        let result = view.on_click(&self.context, button, self.navigation_sender.clone())
+        let result = view
+            .on_click(&self.context, button, self.navigation_sender.clone())
             .await;
         if let Err(e) = result {
             eprintln!("Error handling button click: {}", e);

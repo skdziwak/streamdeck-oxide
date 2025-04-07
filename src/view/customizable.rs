@@ -158,10 +158,11 @@ where
     ///
     /// This method creates a new click button with the given text,
     /// icon, and action.
-    pub fn new<A, F>(text: &'static str, icon: Option<&'static str>, action: A) -> Self
+    pub fn new<A, F, S>(text: S, icon: Option<&'static str>, action: A) -> Self
     where
         F: Future<Output = Result<(), Box<dyn std::error::Error>>> + Send + Sync + 'static,
         A: Fn(C) -> F + Send + Sync + Clone + 'static,
+        S: Into<String>
     {
         ClickButton {
             push_click: Arc::new(Box::new(move |ctx| {
@@ -170,7 +171,7 @@ where
                 Box::pin(async move { action(ctx).await })
             })),
             button: Button {
-                text,
+                text: text.into(),
                 icon,
                 state: ButtonState::Default,
             },
@@ -186,8 +187,8 @@ where
     ///
     /// This method creates a new toggle button with the given text,
     /// icon, fetch function, and push function.
-    pub fn new<FF, PF, F, P>(
-        text: &'static str,
+    pub fn new<FF, PF, F, P, S>(
+        text: S,
         icon: Option<&'static str>,
         fetch_active: F,
         push_active: P,
@@ -197,7 +198,9 @@ where
         PF: Future<Output = Result<(), Box<dyn std::error::Error>>> + Send + Sync + 'static,
         F: Fn(C) -> FF + Send + Sync + Clone + 'static,
         P: Fn(C, bool) -> PF + Send + Sync + Clone + 'static,
+        S: Into<String>
     {
+        let text = text.into();
         ToggleButton {
             fetch_active: Arc::new(Box::new(move |ctx| {
                 let fetch_active = fetch_active.clone();
@@ -210,7 +213,7 @@ where
                 Box::pin(async move { push_active(ctx, x).await })
             })),
             button: Button {
-                text,
+                text: text.clone(),
                 icon,
                 state: ButtonState::Default,
             },
@@ -226,10 +229,10 @@ where
     /// Set the active button.
     ///
     /// This method sets the button to display when active.
-    pub fn when_active(self, text: &'static str, icon: Option<&'static str>) -> Self {
+    pub fn when_active<S: Into<String>>(self, text: S, icon: Option<&'static str>) -> Self {
         ToggleButton {
             active_button: Button {
-                text,
+                text: text.into(),
                 icon,
                 state: ButtonState::Active,
             },
@@ -246,8 +249,8 @@ where
     fn get_state(&self) -> Button {
         let current_state = self.active.load(Ordering::SeqCst);
         match current_state {
-            true => self.active_button,
-            false => self.button,
+            true => self.active_button.clone(),
+            false => self.button.clone(),
         }
     }
 
@@ -271,7 +274,7 @@ where
     C: Send + Clone + Sync + 'static,
 {
     fn get_state(&self) -> Button {
-        self.button
+        self.button.clone()
     }
 
     async fn fetch(&self, _: &C) -> Result<(), Box<dyn std::error::Error>> {
@@ -334,19 +337,19 @@ where
     /// Set a navigation button at the given coordinates.
     ///
     /// This method sets a navigation button at the given coordinates.
-    pub fn set_navigation(
+    pub fn set_navigation<S: Into<String>>(
         &mut self,
         x: usize,
         y: usize,
         navigation: N,
-        text: &'static str,
+        text: S,
         icon: Option<&'static str>,
     ) -> Result<(), Box<dyn std::error::Error>> {
         if x < W::to_usize() && y < H::to_usize() {
             self.matrix[y][x] = Some(CustomizableViewButton::Navigation {
                 navigation,
                 button: Button {
-                    text,
+                    text: text.into(),
                     icon,
                     state: ButtonState::Default,
                 },
@@ -394,7 +397,7 @@ where
                         CustomizableViewButton::Navigation { button, .. } => button,
                         CustomizableViewButton::Button(button) => &button.get_state(),
                     };
-                    button_matrix.set_button(x, y, *state)?;
+                    button_matrix.set_button(x, y, state.clone())?;
                 }
             }
         }

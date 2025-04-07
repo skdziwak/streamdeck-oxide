@@ -13,7 +13,7 @@ type GetViewResult<W, H, C, N> = Result<Box<dyn View<W, H, C, N>>, Box<dyn std::
 /// This trait is implemented by types that represent different views
 /// or screens in a Stream Deck application. It provides a method for
 /// getting the view associated with a navigation entry.
-pub trait NavigationEntry<W, H, C>: Default + Send + Sync + Clone + 'static
+pub trait NavigationEntry<W, H, C>: Default + Send + Sync + Clone + PartialEq + 'static
 where
     W: ArrayLength,
     H: ArrayLength,

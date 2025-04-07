@@ -21,10 +21,10 @@ pub enum ButtonState {
 ///
 /// This struct represents a button in the view system. It contains
 /// the text, icon, and state of the button.
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct Button {
     /// The text to display on the button.
-    pub(crate) text: &'static str,
+    pub(crate) text: String,
     /// The icon to display on the button.
     pub(crate) icon: Option<&'static str>,
     /// The state of the button.
@@ -33,12 +33,12 @@ pub struct Button {
 
 impl Button {
     /// Create a new button with the given text, icon, and state.
-    pub fn new(text: &'static str, icon: Option<&'static str>, state: ButtonState) -> Self {
+    pub fn new(text: String, icon: Option<&'static str>, state: ButtonState) -> Self {
         Button { text, icon, state }
     }
 
     /// Create a new button with the given text.
-    pub fn text(text: &'static str) -> Self {
+    pub fn text(text: String) -> Self {
         Button {
             text,
             icon: None,
@@ -47,7 +47,7 @@ impl Button {
     }
 
     /// Create a new button with the given text and icon.
-    pub fn with_icon(text: &'static str, icon: &'static str) -> Self {
+    pub fn with_icon(text: String, icon: &'static str) -> Self {
         Button {
             text,
             icon: Some(icon),
@@ -56,7 +56,7 @@ impl Button {
     }
 
     /// Create a new button with the given text and state.
-    pub fn with_state(text: &'static str, state: ButtonState) -> Self {
+    pub fn with_state(text: String, state: ButtonState) -> Self {
         Button {
             text,
             icon: None,
@@ -65,7 +65,7 @@ impl Button {
     }
 
     /// Create a new button with the given text, icon, and state.
-    pub fn with_icon_and_state(text: &'static str, icon: &'static str, state: ButtonState) -> Self {
+    pub fn with_icon_and_state(text: String, icon: &'static str, state: ButtonState) -> Self {
         Button {
             text,
             icon: Some(icon),
@@ -74,7 +74,7 @@ impl Button {
     }
 
     /// Update the text of the button.
-    pub fn updated_text(&self, text: &'static str) -> Self {
+    pub fn updated_text(&self, text: String) -> Self {
         Button {
             text,
             icon: self.icon,
@@ -85,7 +85,7 @@ impl Button {
     /// Update the icon of the button.
     pub fn updated_icon(&self, icon: &'static str) -> Self {
         Button {
-            text: self.text,
+            text: self.text.clone(),
             icon: Some(icon),
             state: self.state,
         }
@@ -94,7 +94,7 @@ impl Button {
     /// Update the state of the button.
     pub fn updated_state(&self, state: ButtonState) -> Self {
         Button {
-            text: self.text,
+            text: self.text.clone(),
             icon: self.icon,
             state,
         }
@@ -104,7 +104,7 @@ impl Button {
 impl Default for Button {
     fn default() -> Self {
         Button {
-            text: "",
+            text: "".to_string(),
             icon: None,
             state: ButtonState::Default,
         }

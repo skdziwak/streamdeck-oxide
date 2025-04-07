@@ -26,7 +26,7 @@ pub use view::{Button, ButtonState, DisplayManager, View};
 ///
 /// This function takes a theme, render configuration, Stream Deck instance,
 /// and application context, and runs the main event loop.
-pub use crate::run::run;
+pub use crate::run::{run, run_with_external_triggers, ExternalTrigger};
 
 // Internal modules
 mod run;
