@@ -1,0 +1,9 @@
+[package]
+name = "streamdeck-example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1.88"
+streamdeck-oxide = { path = "../..", features = ["plugins"] }
+tokio = { version = "1.44.1", features = ["full"] }

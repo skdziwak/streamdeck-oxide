@@ -22,6 +22,10 @@ pub use navigation::NavigationEntry;
 pub use theme::Theme;
 pub use view::{Button, ButtonState, DisplayManager, View};
 
+// Optional plugins module
+#[cfg(feature = "plugins")]
+pub mod plugins;
+
 /// Run a Stream Deck application with the specified configuration.
 ///
 /// This function takes a theme, render configuration, Stream Deck instance,
