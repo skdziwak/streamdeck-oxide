@@ -1,6 +1,6 @@
 [package]
 name = "streamdeck-oxide"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "A high-level framework for creating Stream Deck applications in Rust"
 authors = ["Szymon Dziwak <skdziwak@example.com>"]
@@ -12,7 +12,7 @@ keywords = ["streamdeck", "elgato", "ui", "framework", "async"]
 categories = ["gui", "hardware-support", "asynchronous"]
 include = [
     "fonts/Roboto-Medium.ttf",
-    "src/**/*.rs",
+    "**/*.rs",
 ]
 
 
