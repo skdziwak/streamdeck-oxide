@@ -1,6 +1,6 @@
 [package]
 name = "streamdeck-oxide"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "A high-level framework for creating Stream Deck applications in Rust"
 authors = ["Szymon Dziwak <skdziwak@example.com>"]

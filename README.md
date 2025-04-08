@@ -17,7 +17,14 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-streamdeck-oxide = "0.1.2"
+streamdeck-oxide = "0.1.4"
+```
+
+Or if you want to use plugins:
+
+```toml
+[dependencies]
+streamdeck-oxide = { version = "0.1.4", features = ["plugins"] }
 ```
 
 ### Other dependencies
