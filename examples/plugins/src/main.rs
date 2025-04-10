@@ -13,12 +13,13 @@ pub struct AppPluginContext {
     pub message: String,
 }
 
+#[async_trait::async_trait]
 impl Plugin<U5, U3> for AppPlugin {
     fn name(&self) -> &'static str {
         "AppPlugin"
     }
 
-    fn get_view(&self) -> Result<Box<dyn View<U5, U3, PluginContext, PluginNavigation<U5, U3>>>, Box<dyn std::error::Error>> {
+    async fn get_view(&self, context: PluginContext) -> Result<Box<dyn View<U5, U3, PluginContext, PluginNavigation<U5, U3>>>, Box<dyn std::error::Error>> {
         let mut view = CustomizableView::new();
         view.set_button(
             0,
@@ -44,12 +45,13 @@ impl Plugin<U5, U3> for AppPlugin {
     }
 }
 
+#[async_trait::async_trait]
 impl Plugin<U5, U3> for AppPlugin2 {
     fn name(&self) -> &'static str {
         "AppPlugin2"
     }
 
-    fn get_view(&self) -> Result<Box<dyn View<U5, U3, PluginContext, PluginNavigation<U5, U3>>>, Box<dyn std::error::Error>> {
+    async fn get_view(&self, context: PluginContext) -> Result<Box<dyn View<U5, U3, PluginContext, PluginNavigation<U5, U3>>>, Box<dyn std::error::Error>> {
         let mut view = CustomizableView::new();
         view.set_button(
             0,

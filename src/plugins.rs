@@ -10,23 +10,25 @@ use crate::{view::customizable::CustomizableView, NavigationEntry, View};
 
 type GetViewResult<W, H, C, N> = Result<Box<dyn View<W, H, C, N>>, Box<dyn std::error::Error>>;
 
+#[async_trait::async_trait]
 pub trait Plugin<W, H>: Send + Sync + 'static
 where
     W: ArrayLength,
     H: ArrayLength,
 {
     fn name(&self) -> &'static str;
-    fn get_view(&self) -> GetViewResult<W, H, PluginContext, PluginNavigation<W, H>>;
+    async fn get_view(&self, context: PluginContext) -> GetViewResult<W, H, PluginContext, PluginNavigation<W, H>>;
 }
 
 struct DefaultPlugin;
 
+#[async_trait::async_trait]
 impl <W, H> Plugin<W, H> for DefaultPlugin where W: ArrayLength, H: ArrayLength {
     fn name(&self) -> &'static str {
         "DefaultPlugin"
     }
 
-    fn get_view(&self) -> GetViewResult<W, H, PluginContext, PluginNavigation<W, H>> {
+    async fn get_view(&self, context: PluginContext) -> GetViewResult<W, H, PluginContext, PluginNavigation<W, H>> {
         Ok(Box::new(CustomizableView::new()))
     }
 }
@@ -87,9 +89,10 @@ where
     W: ArrayLength,
     H: ArrayLength,
 {
-    fn get_view(
+    async fn get_view(
         &self,
+        context: PluginContext,
     ) -> Result<Box<dyn View<W, H, PluginContext, Self>>, Box<dyn std::error::Error>> {
-         self.plugin.get_view()
+         self.plugin.get_view(context).await
     }
 }

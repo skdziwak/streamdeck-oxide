@@ -25,8 +25,9 @@ enum Navigation {
 impl NavigationEntry<U5, U3, AppContext>
     for Navigation
 {
-    fn get_view(
+    async fn get_view(
         &self,
+        _context: AppContext,
     ) -> Result<
         Box<
             dyn View<

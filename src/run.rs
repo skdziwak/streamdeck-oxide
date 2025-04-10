@@ -23,7 +23,7 @@ where
     N: NavigationEntry<W, H, C>,
 {
     let (display_manager, mut navigation_receiver) =
-        DisplayManager::<N, W, H, C>::new(deck.clone(), config, theme, context)?;
+        DisplayManager::<N, W, H, C>::new(deck.clone(), config, theme, context).await?;
 
     display_manager.fetch_all().await?;
     display_manager.render().await?;
@@ -93,7 +93,7 @@ where
     N: NavigationEntry<W, H, C>,
 {
     let (display_manager, mut navigation_receiver) =
-        DisplayManager::<N, W, H, C>::new(deck.clone(), config, theme, context)?;
+        DisplayManager::<N, W, H, C>::new(deck.clone(), config, theme, context).await?;
 
     display_manager.fetch_all().await?;
     display_manager.render().await?;

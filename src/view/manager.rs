@@ -58,7 +58,7 @@ where
     ///
     /// This method creates a new display manager with the given
     /// Stream Deck, render configuration, theme, and context.
-    pub fn new(
+    pub async fn new(
         deck: Arc<AsyncStreamDeck>,
         config: RenderConfig,
         theme: Theme,
@@ -71,7 +71,7 @@ where
                 config,
                 theme,
                 deck,
-                view: RwLock::new(N::default().get_view()?),
+                view: RwLock::new(N::default().get_view(context.clone()).await?),
                 _navigation: PhantomData,
                 _width: PhantomData,
                 _height: PhantomData,
@@ -90,7 +90,7 @@ where
     pub async fn navigate_to(&self, navigation_entry: N) -> Result<(), Box<dyn std::error::Error>> {
         let mut view = self.view.write().await;
         let mut current_navigation = self.current_navigation.write().await;
-        *view = navigation_entry.get_view()?;
+        *view = navigation_entry.get_view(self.context.clone()).await?;
         *current_navigation = navigation_entry.clone();
         Ok(())
     }

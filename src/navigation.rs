@@ -23,7 +23,10 @@ where
     ///
     /// This method returns a boxed view that can be used to render
     /// the buttons for this navigation entry.
-    fn get_view(&self) -> GetViewResult<W, H, C, Self>;
+    fn get_view(
+        &self,
+        context: C,
+    ) -> impl std::future::Future<Output = GetViewResult<W, H, C, Self>>;
 }
 
 /// A helper trait for creating navigation entries.
