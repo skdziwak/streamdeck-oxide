@@ -9,6 +9,7 @@ use resvg::tiny_skia::Color;
 ///
 /// This struct contains color definitions for various button states
 /// and can be customized to match your application's visual style.
+#[derive(Clone, Copy)]
 pub struct Theme {
     /// Background color for default buttons
     pub(crate) background: Color,

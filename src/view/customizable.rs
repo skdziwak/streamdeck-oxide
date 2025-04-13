@@ -16,7 +16,7 @@ use std::{
 use generic_array::{sequence::GenericSequence, GenericArray, ArrayLength};
 use tokio::sync::mpsc;
 
-use crate::navigation::NavigationEntry;
+use crate::{navigation::NavigationEntry, Theme};
 
 use super::{button::Button, button::ButtonState, matrix::ButtonMatrix, View};
 
@@ -174,7 +174,16 @@ where
                 text: text.into(),
                 icon,
                 state: ButtonState::Default,
+                theme: None,
             },
+        }
+    }
+
+    pub fn with_theme(self, theme: Theme) -> Self {
+        let ClickButton { push_click, button } = self;
+        ClickButton {
+            push_click,
+            button: button.with_theme(theme),
         }
     }
 }
@@ -216,11 +225,13 @@ where
                 text: text.clone(),
                 icon,
                 state: ButtonState::Default,
+                theme: None,
             },
             active_button: Button {
                 text,
                 icon,
                 state: ButtonState::Active,
+                theme: None,
             },
             active: AtomicBool::new(false),
         }
@@ -235,8 +246,20 @@ where
                 text: text.into(),
                 icon,
                 state: ButtonState::Active,
+                theme: None,
             },
             ..self
+        }
+    }
+
+    pub fn with_theme(self, theme: Theme) -> Self {
+        let ToggleButton { fetch_active, push_active, button, active_button, active } = self;
+        ToggleButton {
+            fetch_active,
+            push_active,
+            button: button.with_theme(theme),
+            active_button: active_button.with_theme(theme),
+            active,
         }
     }
 }
@@ -352,6 +375,7 @@ where
                     text: text.into(),
                     icon,
                     state: ButtonState::Default,
+                    theme: None,
                 },
                 _marker: PhantomData,
             });

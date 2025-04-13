@@ -60,7 +60,7 @@ impl NavigationEntry<U5, U3, AppContext>
                             println!("Message: {}", ctx.message);
                             Ok(())
                         },
-                    ),
+                    ).with_theme(Theme::dark()), // Use dark theme for this button
                 )?;
 
                 // Add a click button

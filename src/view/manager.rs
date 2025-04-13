@@ -138,19 +138,20 @@ where
             for y in 0..H::to_usize() {
                 let button = &button_matrix.buttons[y][x];
                 let button_index = (y * W::to_usize() + x) as u8;
+                let theme = button.theme.as_ref().unwrap_or(&self.theme);
                 let background_color = match button.state {
-                    ButtonState::Default => self.theme.background,
-                    ButtonState::Active => self.theme.active_background,
-                    ButtonState::Inactive => self.theme.inactive_background,
-                    ButtonState::Error => self.theme.error_background,
-                    ButtonState::Pressed => self.theme.pressed_background,
+                    ButtonState::Default => theme.background,
+                    ButtonState::Active => theme.active_background,
+                    ButtonState::Inactive => theme.inactive_background,
+                    ButtonState::Error => theme.error_background,
+                    ButtonState::Pressed => theme.pressed_background,
                 };
                 let foreground_color = match button.state {
-                    ButtonState::Default => self.theme.foreground_color,
-                    ButtonState::Active => self.theme.active_foreground_color,
-                    ButtonState::Inactive => self.theme.foreground_color,
-                    ButtonState::Error => self.theme.foreground_color,
-                    ButtonState::Pressed => self.theme.active_foreground_color,
+                    ButtonState::Default => theme.foreground_color,
+                    ButtonState::Active => theme.active_foreground_color,
+                    ButtonState::Inactive => theme.foreground_color,
+                    ButtonState::Error => theme.foreground_color,
+                    ButtonState::Pressed => theme.active_foreground_color,
                 };
                 let raw_button = match button.icon {
                     Some(icon) => crate::button::Button::IconWithText {

@@ -2,6 +2,8 @@
 //!
 //! This module provides types for representing buttons in the view system.
 
+use crate::Theme;
+
 /// The state of a button.
 #[derive(Clone, Copy)]
 pub enum ButtonState {
@@ -29,12 +31,19 @@ pub struct Button {
     pub(crate) icon: Option<&'static str>,
     /// The state of the button.
     pub(crate) state: ButtonState,
+    /// Alternative theme
+    pub(crate) theme: Option<Theme>,
 }
 
 impl Button {
     /// Create a new button with the given text, icon, and state.
     pub fn new(text: String, icon: Option<&'static str>, state: ButtonState) -> Self {
-        Button { text, icon, state }
+        Button {
+            text,
+            icon,
+            state,
+            theme: None,
+        }
     }
 
     /// Create a new button with the given text.
@@ -43,6 +52,7 @@ impl Button {
             text,
             icon: None,
             state: ButtonState::Default,
+            theme: None,
         }
     }
 
@@ -52,6 +62,7 @@ impl Button {
             text,
             icon: Some(icon),
             state: ButtonState::Default,
+            theme: None,
         }
     }
 
@@ -61,6 +72,7 @@ impl Button {
             text,
             icon: None,
             state,
+            theme: None,
         }
     }
 
@@ -70,6 +82,7 @@ impl Button {
             text,
             icon: Some(icon),
             state,
+            theme: None,
         }
     }
 
@@ -79,6 +92,7 @@ impl Button {
             text,
             icon: self.icon,
             state: self.state,
+            theme: self.theme.clone(),
         }
     }
 
@@ -88,6 +102,7 @@ impl Button {
             text: self.text.clone(),
             icon: Some(icon),
             state: self.state,
+            theme: self.theme.clone(),
         }
     }
 
@@ -97,6 +112,15 @@ impl Button {
             text: self.text.clone(),
             icon: self.icon,
             state,
+            theme: self.theme.clone(),
+        }
+    }
+
+    /// Update the theme of the button.
+    pub fn with_theme(self, theme: Theme) -> Self {
+        Button {
+            theme: Some(theme),
+            ..self
         }
     }
 }
@@ -107,6 +131,7 @@ impl Default for Button {
             text: "".to_string(),
             icon: None,
             state: ButtonState::Default,
+            theme: None,
         }
     }
 }
